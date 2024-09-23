@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Fusion;
+using GNW2.Player;
 //using Mono.Cecil;
 
 namespace GNW2.Projectile
@@ -14,6 +16,7 @@ namespace GNW2.Projectile
         [SerializeField] private float redValue = 1f;
         public GameObject target;
         [SerializeField] private float lifeTime = 2f;
+        [SerializeField] private int damage = 45;
         [Networked] private TickTimer life { get; set; }
 
         public override void Spawned()
@@ -46,11 +49,27 @@ namespace GNW2.Projectile
             }
         renderer.material.color = color;
         }
-
-        // Update is called once per frame
-        void Update()
+        private void OnCollisionEnter(Collision other)
         {
+            Debug.Log($"Hit Collider {other.collider.name}");
+            if (Object.HasStateAuthority)
+            {
 
+
+
+                var combatInterface = other.collider.GetComponent<ICombat>();
+                if (combatInterface != null)
+                {
+                    combatInterface.TakeDamage(damage);
+                }
+                else
+                {
+                    Debug.LogError("Combat Interface Found");
+                }
+
+                Runner.Despawn(Object);
+            }
         }
+
     }
 }

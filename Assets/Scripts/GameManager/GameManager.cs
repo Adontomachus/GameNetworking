@@ -9,6 +9,8 @@ using Fusion.Sockets;
 using GNW2.Input;
 using UnityEngine.SceneManagement;
 using ExitGames.Client.Photon.StructWrapping;
+using TMPro;
+using UnityEngine.UI;
 
 namespace GNW2.GameManager
 {
@@ -17,12 +19,16 @@ namespace GNW2.GameManager
         [NonSerialized] public NetworkRunner networkRunnerPrefab;
         private static GameManager _instance;
         [NonSerialized] public NetworkRunner _runner;
+        [SerializeField] private Button _button;
+        [SerializeField] private TMP_InputField _input;
         public static bool changeColors = false;
         private bool _isMouseButton0Pressed;
 
         public static NetworkRunner Runner => _instance._runner;
         [SerializeField] private NetworkPrefabRef _playerPrefab;
         private Dictionary<PlayerRef, NetworkObject> _spawnedPlayers = new Dictionary<PlayerRef, NetworkObject>();
+
+
 
         #region NetworkRunner Callbacks
 

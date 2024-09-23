@@ -10,7 +10,7 @@ using static UnityEngine.GraphicsBuffer;
 
 namespace GNW2.Player
 {
-    public class Player : NetworkBehaviour
+    public class Player : NetworkBehaviour, ICombat
     {
         public GameObject playerHUD;
         [SerializeField] InformationText informationText;
@@ -29,7 +29,7 @@ namespace GNW2.Player
         public float delay;
         [SerializeField] private BulletScript bulletPrefab;
         //start
-
+        public event Action<int> OnTakeDamage;
         //private bool canFire = true;
         //private event Action OnButtonPressed;
 
@@ -137,6 +137,9 @@ namespace GNW2.Player
             }
             bulletScript.Init();
         }
-
+        public void TakeDamage(int Damage)
+        {
+            OnTakeDamage?.Invoke(Damage);
+        }
     }
 }
