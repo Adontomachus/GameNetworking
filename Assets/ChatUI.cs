@@ -12,16 +12,17 @@ using System;
 public class ChatUI : NetworkBehaviour
 {
     public TextMeshProUGUI messages;
+   public TextMeshProUGUI input;
     public TextMeshProUGUI usernameInput;
-    public TextMeshProUGUI input;
+
     public GameObject chatUI;
-    public event Action<string> OnMesageSent;
+    public event Action<string> OnMessageSent;
     public string username = "Player";
     // Start is called before the first frame update
     void Start()
     {
         chatUI.SetActive(false);
-        username = usernameInput.text;
+        username = "Player";
     }
     private void Awake()
     {
@@ -32,7 +33,7 @@ public class ChatUI : NetworkBehaviour
     {
         string message = input.text;
         chatUI.SetActive(false);
-        RPC_SendMessage(username, message);
+        RPC_SendMessage(message, username);
     }
     private void Update()
     {
@@ -45,6 +46,6 @@ public class ChatUI : NetworkBehaviour
     [Rpc(RpcSources.All, RpcTargets.All)]
     public void RPC_SendMessage(string username, string message, RpcInfo rpcInfo = default)
     {
-        messages.text = $"{username}: {message}\n";
+        messages.text += $"{message}: {username}\n";
     }
 }
