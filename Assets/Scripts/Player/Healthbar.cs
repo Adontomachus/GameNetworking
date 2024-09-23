@@ -27,8 +27,7 @@ namespace GNW2.Player
             Debug.Log($"Player: {Runner.LocalPlayer.PlayerId} Health: {_currentHealth}");
             if (_currentHealth < 0)
             {
-                RPC_DeathFx(transform.position);
-                spawnDeathFx = false;
+                    RPC_DeathFx(transform.position);
                 //player.SetActive(false);
                 //Runner?.Despawn(Object);
             }
@@ -56,9 +55,15 @@ namespace GNW2.Player
 
             if (_deathFx != null && spawnDeathFx)
             {
-                
-                Instantiate(_deathFx, position, Quaternion.identity);
-                Runner?.Despawn(Object);
+                if (Object.HasStateAuthority)
+                {
+                    Instantiate(_deathFx, position, Quaternion.identity);
+                }
+                else
+                {
+                    Instantiate(_deathFx, position, Quaternion.identity);
+                    Runner?.Despawn(Object);
+                }
             }
         }
 
