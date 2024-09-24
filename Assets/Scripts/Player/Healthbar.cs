@@ -6,7 +6,7 @@ namespace GNW2.Player
     public class Healthbar : NetworkBehaviour
     {
         public bool spawnDeathFx = true;
-        public GameObject player;
+        public GameObject player, spawnPoint;
         public int maxHealth = 60;
         [Networked] public int _currentHealth { get; set; }
         [SerializeField] private ParticleSystem _hitFx;
@@ -17,6 +17,7 @@ namespace GNW2.Player
 
         private void Start()
         {
+            spawnPoint = GameObject.FindGameObjectWithTag("Manager");
             _currentHealth = maxHealth;
             _currentPlayer = GetComponent<Player>();
             _currentPlayer.OnTakeDamage += TakeHealthDamage;
@@ -27,6 +28,8 @@ namespace GNW2.Player
             Debug.Log($"Player: {Runner.LocalPlayer.PlayerId} Health: {_currentHealth}");
             if (_currentHealth < 0)
             {
+                _currentHealth = maxHealth;
+                transform.position = spawnPoint.transform.position;
                     RPC_DeathFx(transform.position);
                 //player.SetActive(false);
                 //Runner?.Despawn(Object);
